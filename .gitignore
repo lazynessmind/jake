@@ -1,9 +1,8 @@
 .vscode
 CMakeFiles
-test
+example/build/*
 cmake_install.cmake
 CMakeCache.txt
 jake
-jakefile.properties
 Makefile
 *.jar
