@@ -25,12 +25,26 @@ void build_project(int argc, char **argv)
             if (p.path().filename().extension() == ".java")
                 sources.append(p.path()).append(" ");
 
-    printf("> Compile sources:\n");
-    std::string command = "javac ";
-    command.append("-d ").append(props["build_path"]).append(" ").append(sources).c_str();
-    printf("$ %s\n", command.c_str());
-    exec(command.c_str());
-    printf("> Done!\n");
+    //Compile the collected sources with the -d option to specify the build folder.
+    //TODO: Introduce default build folder.
+    //      This would make the option "build_path" on jakefile optional.
+    if (!sources.empty())
+    {
+        printf("> Compile sources:\n");
+        std::string compile_command = "javac -d ";
+        compile_command.append(props["build_path"])
+            .append(" ")
+            .append(sources);
+        printf("$ %s\n", compile_command.c_str());
+        exec(compile_command.c_str());
+        printf("> Done!\n");
+    }
+    else
+    {
+        printf("> Didn't found any .java files in the specified source folder and subfolders.\n\tPath: %s\n", props["src_path"].c_str());
+        printf("Press any key to continue or Ctrl+C to exit.");
+        getchar();
+    }
 
     printf("> Create .jar file:\n");
     std::string current = std::filesystem::current_path();
