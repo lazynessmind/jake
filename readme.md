@@ -9,6 +9,7 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 - [ ] Make some options `optional`. I.e: `entry_point` isn't always needed.
 - [ ] Add support for 3rd party libraries.
 - [ ] Support for external manifest file.
+- [ ] Jakefile option: Include folder.
 
 ### jakefile:
 
