@@ -52,9 +52,17 @@ void build_project(int argc, char **argv)
     std::string pwd = std::filesystem::current_path().string();
     printf("$ cd %s\n", build_path.c_str());
     std::filesystem::current_path(build_path);
-    std::string jar_command = "jar cfe ";
-    jar_command.append(props["jar_name"]).append(".jar ");
-    jar_command.append(props["entry_point"]).append(" *");
+    std::string jar_command = "jar ";
+    if (has_prop(props, "entry_point"))
+    {
+        jar_command.append("cfe ");
+        jar_command.append(props["entry_point"]).append(" ");
+    }
+    else
+    {
+        jar_command.append("cf ");
+    }
+    jar_command.append(props["jar_name"]).append(".jar ").append("*");
     printf("$ %s\n", jar_command.c_str());
     exec(jar_command.c_str());
     printf("$ cd %s\n", pwd.c_str());
