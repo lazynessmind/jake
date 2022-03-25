@@ -76,3 +76,8 @@ std::string get_prop_or_return(std::map<std::string, std::string> map, std::stri
 {
     return map.find(key) != map.end() ? map[key] : fallback;
 }
+
+bool has_prop(std::map<std::string, std::string> map, std::string key)
+{
+    return map.find(key) != map.end();
+}
