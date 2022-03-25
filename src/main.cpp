@@ -18,21 +18,21 @@ void build_project(int argc, char **argv)
     std::string jakefile = "";
     const char *arg = shift(&argc, &argv);
     auto props = parse_properties_file(jakefile.append(arg).append("/jakefile.properties").c_str());
-    
+
+    const auto build_path = get_prop_or_return(props, "build_path", "./build");
+
     std::string sources;
-    for (const auto &p : std::filesystem::recursive_directory_iterator(props["src_path"]))
+    for (const auto &p : std::filesystem::recursive_directory_iterator(get_prop_or_return(props, "src_path", ".")))
         if (!std::filesystem::is_directory(p))
             if (p.path().filename().extension() == ".java")
                 sources.append(p.path()).append(" ");
 
-    //Compile the collected sources with the -d option to specify the build folder.
-    //TODO: Introduce default build folder.
-    //      This would make the option "build_path" on jakefile optional.
+    // Compile the collected sources with the -d option to specify the build folder.
     if (!sources.empty())
     {
         printf("> Compile sources:\n");
         std::string compile_command = "javac -d ";
-        compile_command.append(props["build_path"])
+        compile_command.append(build_path)
             .append(" ")
             .append(sources);
         printf("$ %s\n", compile_command.c_str());
