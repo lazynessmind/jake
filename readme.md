@@ -7,6 +7,8 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 - [x] Automatic gather of `.java` files and compilation.
 - [x] Build the `.jar` file and include the entry point.
 - [ ] Make some options `optional`. I.e: `entry_point` isn't always needed.
+  - [x] Build and source path.
+  - [ ] Entry point.  
 - [ ] Add support for 3rd party libraries.
 - [ ] Support for external manifest file.
 - [ ] Jakefile option: Include folder.
