@@ -46,17 +46,19 @@ void build_project(int argc, char **argv)
         getchar();
     }
 
+    // Create the .jar file with the classes available in the `build_path` props and includes the `entry_point`.
+    //TODO: Make `entry_point` optional.
     printf("> Create .jar file:\n");
-    std::string current = std::filesystem::current_path();
-    printf("$ cd %s\n", props["build_path"].c_str());
-    std::filesystem::current_path(props["build_path"]);
+    std::string pwd = std::filesystem::current_path().string();
+    printf("$ cd %s\n", build_path.c_str());
+    std::filesystem::current_path(build_path);
     std::string jar_command = "jar cfe ";
     jar_command.append(props["jar_name"]).append(".jar ");
     jar_command.append(props["entry_point"]).append(" *");
     printf("$ %s\n", jar_command.c_str());
     exec(jar_command.c_str());
-    printf("$ cd %s\n", current.c_str());
-    std::filesystem::current_path(current);
+    printf("$ cd %s\n", pwd.c_str());
+    std::filesystem::current_path(pwd);
     printf("> Done!\n");
 
     printf("> Move .jar to root folder:\n");
