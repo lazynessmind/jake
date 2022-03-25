@@ -1,13 +1,12 @@
-
-
 #include <stdexcept>
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cassert>
 
 #include "./util.h"
 
-//https://stackoverflow.com/a/478960
+// https://stackoverflow.com/a/478960
 std::string exec(const char *cmd)
 {
     char buffer[128];
@@ -31,7 +30,7 @@ std::string exec(const char *cmd)
     return result;
 }
 
-//https://stackoverflow.com/a/46931770
+// https://stackoverflow.com/a/46931770
 std::vector<std::string> split(std::string s, std::string delimiter)
 {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
@@ -51,7 +50,7 @@ std::vector<std::string> split(std::string s, std::string delimiter)
 
 char *shift(int *argc, char ***argv)
 {
-    //assert(*argc > 0);
+    assert(*argc > 0);
     char *result = **argv;
     *argv += 1;
     *argc -= 1;
@@ -71,4 +70,9 @@ std::map<std::string, std::string> parse_properties_file(const char *path)
         config.insert(std::pair(props[0], props[1]));
     }
     return config;
+}
+
+std::string get_prop_or_return(std::map<std::string, std::string> map, std::string key, std::string fallback)
+{
+    return map.find(key) != map.end() ? map[key] : fallback;
 }
