@@ -1,5 +1,7 @@
 # jake - same as make but for java
 
+**Warning:** This is a WIP and my knowledge of C++ isn't the best of all time. Feel free to improve everthing!
+
 Simple build system for java.
 The idea came from the simple make build system for C and C++. Both Gradle and Maven are useful but requires basic knowledge and has a lot of boilerplate.
 
@@ -12,20 +14,34 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 - [x] Add support for 3rd party libraries.
 - [ ] Support for external manifest file.
 - [ ] Jakefile option: Include folder.
-- [ ] Change jakefile to json
+- [x] Change jakefile to json
+
 ### jakefile:
 
-- Create a file called `jakefile.properties`
-  - **src_path**: Where the `.java` are stored.  
-  - **build_path**: Compilation output files.  
-  - **entry_point**: The path to the class that contains the `main` method.
-  - **jar_name**: The output jar name.  
+Create a file called `jakefile.json`.<br>
+Note: `[?]` means the field is optional. <br>
+Every fields only accepts strings.
 
-```toml
-src_path=./src
-build_path=./build
-entry_point=me.test.Main
-jar_name=Test
+- **src_path[?]**: Where the source code is present. Defaults to `./src`.  
+- **build_path[?]**: Compilation output files. Defaults to `./build`.  
+- **entry_point[?]**: The path to the class that contains the `main` method.
+- **project_name**: The project name.
+- **version**: The project version.
+- **libs**: Array of paths of .jar files to include on classpath.
+- **fat_jar[?]**: If set to false, jake doesn't include the libs when creating the jar. Defaults to `"true"`.
+
+```json
+{
+    "project_name": "Test",
+    "version": "1.0.0",
+    "src_path": "./example/src",
+    "build_path": "./example/build",
+    "entry_point": "lazy.test.Main",
+    "fat_jar": "true",
+    "libs": [
+        "./example/libs/math.jar"
+    ]
+}
 ```
 
 #### Command line:
