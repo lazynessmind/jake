@@ -22,13 +22,18 @@ void build_project(int argc, char **argv)
     std::string pwd = std::filesystem::current_path().string();
     const auto build_path = get_prop_or_return(props, "build_path", "./build");
 
+    if (!std::filesystem::exists(build_path))
+    {
+        std::filesystem::create_directories(build_path);
+    }
+
     std::string sources;
     for (const auto &p : std::filesystem::recursive_directory_iterator(get_prop_or_return(props, "src_path", ".")))
         if (!std::filesystem::is_directory(p))
             if (p.path().filename().extension() == ".java")
                 sources.append(p.path()).append(" ");
 
-    //TODO: Change this after the move to json.
+    // TODO: Change this after the move to json.
     std::string libs;
     if (has_prop(props, "libs_path"))
     {
@@ -42,6 +47,7 @@ void build_project(int argc, char **argv)
                     extract_jar.append(pwd).append("/").append(p.path().string());
                     printf("$ %s\n", extract_jar.c_str());
                     printf("$ cd %s\n", build_path.c_str());
+
                     std::filesystem::current_path(build_path);
                     exec(extract_jar.c_str());
                     std::filesystem::current_path(pwd);
