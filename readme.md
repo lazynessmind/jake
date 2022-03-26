@@ -43,10 +43,14 @@ In the above command the `jakefile.properties` is in the root file.
 
 ### Build jake:
 
-- Requires `cmake`.
+- Requires:
+  - **cmake**
 
 ```bash
 $ git clone https://github.com/lazynessmind/jake.git
 $ cd jake
-$ cmake -b .
+$ cmake --build .
 ```
+### Third Party Software
+
+- `nlohmann::json` https://github.com/nlohmann/json/releases
