@@ -2,6 +2,8 @@
 #include <filesystem>
 #include <cstring>
 
+#include "./include/main.h"
+#include "./include/java.h"
 #include "./include/util.h"
 
 void print_usage()
@@ -15,104 +17,66 @@ void print_usage()
 
 void build_project(int argc, char **argv)
 {
-    std::string jakefile = "";
+    std::string jakefile2 = "";
     const char *arg = shift(&argc, &argv);
-    auto props = parse_properties_file(jakefile.append(arg).append("/jakefile.properties").c_str());
+    JakeProj proj = try_create(load_json(jakefile2.append(arg).append("/jakefile.json").c_str()));
 
-    std::string pwd = std::filesystem::current_path().string();
-    const auto build_path = get_prop_or_return(props, "build_path", "./build");
-
-    if (!std::filesystem::exists(build_path))
-    {
-        std::filesystem::create_directories(build_path);
-    }
-
-    std::string sources;
-    for (const auto &p : std::filesystem::recursive_directory_iterator(get_prop_or_return(props, "src_path", ".")))
-        if (!std::filesystem::is_directory(p))
-            if (p.path().filename().extension() == ".java")
-                sources.append(p.path()).append(" ");
-
-    // TODO: Change this after the move to json.
-    std::string libs;
-    if (has_prop(props, "libs_path"))
-    {
-        for (const auto &p : std::filesystem::recursive_directory_iterator(props["libs_path"]))
-            if (!std::filesystem::is_directory(p))
-                if (p.path().filename().extension() == ".jar")
-                {
-                    libs.append(".:");
-                    libs.append(p.path().string()).append(":");
-                    std::string extract_jar = "jar xf ";
-                    extract_jar.append(pwd).append("/").append(p.path().string());
-                    printf("$ %s\n", extract_jar.c_str());
-                    printf("$ cd %s\n", build_path.c_str());
-
-                    std::filesystem::current_path(build_path);
-                    exec(extract_jar.c_str());
-                    std::filesystem::current_path(pwd);
-                }
-    }
-
-    // Compile the collected sources with the -d option to specify the build folder.
-    if (!sources.empty())
-    {
-        printf("> Compile sources:\n");
-        std::string compile_command = "javac ";
-        if (!libs.empty())
-        {
-            compile_command
-                .append("-cp ")
-                .append(libs)
-                .append(" ");
-        }
-        compile_command.append("-d ").append(build_path).append(" ").append(sources);
-        printf("$ %s\n", compile_command.c_str());
-        exec(compile_command.c_str());
-        printf("> Done!\n");
-    }
-    else
-    {
-        printf("> Didn't found any .java files in the specified source folder and subfolders.\n\tPath: %s\n", props["src_path"].c_str());
-        printf("Press any key to continue or Ctrl+C to exit.");
-        getchar();
-    }
-
-    // Create the .jar file with the classes available in the `build_path` props and includes the `entry_point`.
-    printf("> Create .jar file:\n");
-    printf("$ cd %s\n", build_path.c_str());
-    std::filesystem::current_path(build_path);
-    std::string jar_command = "jar ";
-    if (has_prop(props, "entry_point"))
-    {
-        jar_command.append("cfe ");
-        jar_command.append(props["jar_name"]).append(".jar ");
-        jar_command.append(props["entry_point"]).append(" ");
-    }
-    else
-    {
-        jar_command.append("cf ");
-        jar_command.append(props["jar_name"]).append(".jar ");
-    }
-    jar_command.append("*");
-    printf("$ %s\n", jar_command.c_str());
-    exec(jar_command.c_str());
-    printf("$ cd %s\n", pwd.c_str());
-    std::filesystem::current_path(pwd);
-    printf("> Done!\n");
+    gen_javac_cmd(proj);
+    gen_extract_cmd(proj);
+    gen_jar_cmd(proj);
 
     printf("> Move .jar to root folder:\n");
-    std::string jarPath = props["build_path"].append("/").append(props["jar_name"]).append(".jar");
+    std::string jarPath = proj.build_path; 
+    jarPath.append("/").append(proj.jar_name).append(".jar");
     if (std::filesystem::exists(jarPath))
     {
-        printf("$ mv %s %s\n", jarPath.c_str(), std::filesystem::current_path().string().append("/").append(props["jar_name"]).append(".jar").c_str());
-        std::filesystem::rename(jarPath, std::filesystem::current_path().string().append("/").append(props["jar_name"]).append(".jar"));
+        printf("  $ mv %s %s\n", jarPath.c_str(), std::filesystem::current_path().string().append("/").append(proj.jar_name).append(".jar").c_str());
+        std::filesystem::rename(jarPath, std::filesystem::current_path().string().append("/").append(proj.jar_name).append(".jar"));
     }
     printf("> Done!\n");
 }
 
+JakeProj try_create(const nlohmann::json &jakefile)
+{
+    JakeProj proj;
+    proj.proj_name = try_get(jakefile, "project_name");
+    proj.version = try_get(jakefile, "version");
+    proj.src_path = try_get_or(jakefile, "src_path", "./src");
+    proj.build_path = try_get_or(jakefile, "build_path", "./build");
+    proj.entry_point = try_get_or(jakefile, "entry_point", "");
+    proj.fat_jar = try_get_or(jakefile, "fat_jar", "true");
+    proj.pwd = std::filesystem::current_path();
+    proj.jar_name = proj.proj_name;
+    proj.jar_name.append("-").append(proj.version);
+
+    // Prepare directories
+    std::filesystem::create_directories(proj.src_path);
+    std::filesystem::create_directories(proj.build_path);
+
+    // Generate sources
+    std::string sources;
+    auto paths = collect_files_with_ext_on_path(proj.src_path.c_str(), ".java");
+    for (auto path : paths)
+        sources.append(path).append(" ");
+    proj.sources = sources;
+
+    // Generate file path
+    if (jakefile.find("libs") != jakefile.end())
+    {
+        proj.hasLibs = true;
+        std::string classpath = ".:";
+        proj.libs = jakefile["libs"].get<std::vector<std::string>>();
+        for (auto lib : proj.libs)
+            classpath.append(lib).append(":");
+        proj.classpath = classpath;
+    }
+
+    return proj;
+}
+
 int main(int argc, char **argv)
 {
+
     if (argc == 1)
     {
         print_usage();
