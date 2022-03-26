@@ -9,10 +9,10 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 - [x] Make some options `optional`. I.e: `entry_point` isn't always needed.
   - [x] Build and source path.
   - [x] Entry point.  
-- [ ] Add support for 3rd party libraries.
+- [x] Add support for 3rd party libraries.
 - [ ] Support for external manifest file.
 - [ ] Jakefile option: Include folder.
-
+- [ ] Change jakefile to json
 ### jakefile:
 
 - Create a file called `jakefile.properties`
