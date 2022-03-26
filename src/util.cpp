@@ -81,3 +81,20 @@ bool has_prop(std::map<std::string, std::string> map, std::string key)
 {
     return map.find(key) != map.end();
 }
+
+nlohmann::json load_json(const char *path)
+{
+    if (std::filesystem::exists(path))
+    {
+        std::ifstream f(path);
+        std::stringstream buffer;
+        buffer << f.rdbuf();
+        return nlohmann::json::parse(buffer.str());
+    }
+    else
+    {
+        printf("> File not found in path:\n\t%s\n", path);
+        exit(-1);
+    }
+    return nullptr;
+}
