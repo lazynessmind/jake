@@ -113,6 +113,11 @@ std::string try_get(const nlohmann::json &json, const char *key)
     return nullptr;
 }
 
+std::string try_get_or(const nlohmann::json &json, const char *key, const char* fallback)
+{
+    return json.find(key) != json.end() ? json[key].get<std::string>() : fallback;
+}
+
 std::vector<std::string> collect_files_with_ext_on_path(const char *path, const char *extension)
 {
     std::vector<std::string> paths;
