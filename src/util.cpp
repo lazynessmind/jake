@@ -98,3 +98,13 @@ nlohmann::json load_json(const char *path)
     }
     return nullptr;
 }
+
+std::vector<std::string> collect_files_with_ext_on_path(const char *path, const char *extension)
+{
+    std::vector<std::string> paths;
+    for (const auto &p : std::filesystem::recursive_directory_iterator(path))
+        if (!std::filesystem::is_directory(p))
+            if (p.path().filename().extension() == extension)
+                paths.emplace_back(p.path());
+    return paths;
+}
