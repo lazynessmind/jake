@@ -99,6 +99,20 @@ nlohmann::json load_json(const char *path)
     return nullptr;
 }
 
+std::string try_get(const nlohmann::json &json, const char *key)
+{
+    if (json.find(key) != json.end())
+    {
+        return json[key].get<std::string>();
+    }
+    else
+    {
+        printf("> Missing property on jakefile.json. \"%s\"\n", key);
+        exit(-1);
+    }
+    return nullptr;
+}
+
 std::vector<std::string> collect_files_with_ext_on_path(const char *path, const char *extension)
 {
     std::vector<std::string> paths;
