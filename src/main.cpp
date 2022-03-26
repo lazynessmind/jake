@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <cstring>
 
-#include "./util.h"
+#include "./include/util.h"
 
 void print_usage()
 {

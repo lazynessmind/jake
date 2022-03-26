@@ -5,5 +5,6 @@ project(jake)
 add_executable(jake
     ./src/util.cpp 
     ./src/main.cpp
-    ./src/util.h
+    ./src/include/util.h
+    ./src/include/json.hpp
 )
