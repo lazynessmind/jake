@@ -22,6 +22,8 @@ struct JakeProj
     std::string jar_name;
 };
 
-JakeProj try_create(const nlohmann::json&);
+void print_usage();
+void build_project(int, char **);
+JakeProj try_create(const nlohmann::json &);
 
 #endif // MAIN_FILE
