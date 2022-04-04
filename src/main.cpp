@@ -21,6 +21,9 @@ void build_project(int argc, char **argv)
     const char *arg = shift(&argc, &argv);
     JakeProj proj = try_create(load_json(jakefile2.append(arg).append("/jakefile.json").c_str()));
 
+    // I don't belive this is the best option, but it's the easiest.
+    std::filesystem::remove_all(proj.build_path);
+
     gen_javac_cmd(proj);
     gen_extract_cmd(proj);
     gen_jar_cmd(proj);
