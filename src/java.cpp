@@ -48,6 +48,22 @@ void gen_extract_cmd(const JakeProj &proj)
 
 void gen_jar_cmd(const JakeProj &proj)
 {
+    if (!proj.includes.empty())
+    {
+        for (auto include : proj.includes)
+        {
+            if (std::filesystem::is_directory(include))
+            {
+                std::string tmp = proj.build_path;
+                std::filesystem::create_directories(tmp.append("/").append(include));
+                std::filesystem::copy(include, tmp);
+            }
+            else
+            {
+                std::filesystem::copy(include, proj.build_path);
+            }
+        }
+    }
     std::filesystem::current_path(proj.build_path);
     std::string jar_command = "jar ";
     if (!proj.entry_point.empty())
@@ -61,11 +77,9 @@ void gen_jar_cmd(const JakeProj &proj)
         jar_command.append("cf ");
         jar_command.append(proj.jar_name).append(".jar ");
     }
-    jar_command.append("*");
+    jar_command.append("* ");
     printf("> Creating jar file: %s\n", proj.jar_name.c_str());
     printf("  $ %s\n", jar_command.c_str());
     exec(jar_command.c_str());
     std::filesystem::current_path(proj.pwd);
-   
-
 }
