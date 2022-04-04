@@ -18,6 +18,7 @@ struct JakeProj
     std::string fat_jar;
     std::string pwd;
     std::vector<std::string> libs;
+    std::vector<std::string> includes;
     bool hasLibs;
     std::string jar_name;
 };

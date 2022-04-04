@@ -29,7 +29,7 @@ void build_project(int argc, char **argv)
     gen_jar_cmd(proj);
 
     printf("> Move .jar to root folder:\n");
-    std::string jarPath = proj.build_path; 
+    std::string jarPath = proj.build_path;
     jarPath.append("/").append(proj.jar_name).append(".jar");
     if (std::filesystem::exists(jarPath))
     {
@@ -74,12 +74,15 @@ JakeProj try_create(const nlohmann::json &jakefile)
         proj.classpath = classpath;
     }
 
+    // Gather include paths
+    if (jakefile.find("include") != jakefile.end())
+        proj.includes = jakefile["include"].get<std::vector<std::string>>();
+
     return proj;
 }
 
 int main(int argc, char **argv)
 {
-
     if (argc == 1)
     {
         print_usage();
