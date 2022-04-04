@@ -42,6 +42,10 @@ Every fields only accepts strings.
     "fat_jar": "true",
     "libs": [
         "./example/libs/math.jar"
+    ],
+    "include": [
+      "./example/include.txt",
+      "./examples/assets/"
     ]
 }
 ```
