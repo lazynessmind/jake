@@ -29,6 +29,7 @@ Every fields only accepts strings.
 - **project_name**: The project name.
 - **version**: The project version.
 - **libs**: Array of paths of .jar files to include on classpath.
+- **include**: Array of paths to include in the jar.
 - **fat_jar[?]**: If set to false, jake doesn't include the libs when creating the jar. Defaults to `"true"`.
 
 ```json
