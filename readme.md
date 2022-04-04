@@ -13,8 +13,9 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
   - [x] Entry point.  
 - [x] Add support for 3rd party libraries.
 - [ ] Support for external manifest file.
-- [ ] Jakefile option: Include folder.
+- [x] Jakefile option: Include folder.
 - [x] Change jakefile to json
+- [ ] Maybe my own Java Archive Tool.
 
 ### jakefile:
 
