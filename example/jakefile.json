@@ -1,0 +1,15 @@
+{
+    "project_name": "Test",
+    "version": "1.0.0",
+    "src_path": "./src",
+    "build_path": "./build",
+    "entry_point": "lazy.test.Main",
+    "libs": [
+        "./libs/math.jar"
+    ],
+    "include": [
+        "./assets",
+        "./assets/other",
+        "LICENSE.txt"
+    ]
+}
