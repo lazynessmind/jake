@@ -5,6 +5,8 @@
 Simple build system for java.
 The idea came from the simple make build system for C and C++. Both Gradle and Maven are useful but requires basic knowledge and has a lot of boilerplate.
 
+**Note:** Only tested on Linux Ubuntu 21
+
 ### Roadmap:
 - [x] Automatic gather of `.java` files and compilation.
 - [x] Build the `.jar` file and include the entry point.
@@ -17,6 +19,8 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 - [x] Jakefile option: Include folder.
 - [x] Change jakefile to json
 - [ ] Maybe my own Java Archive Tool.
+- [ ] External repositories
+- [ ] Refactor code to use namespaces and classes??
 
 ### jakefile:
 
