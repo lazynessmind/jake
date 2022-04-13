@@ -3,50 +3,50 @@
 #include "./include/java.h"
 #include "./include/util.h"
 
-void gen_javac_cmd(const JakeProj &proj)
+void Java::CompileJavaSources(const JakeProj &proj)
 {
     if (!proj.sources.empty())
     {
-        std::string compile_command = "javac ";
+        std::string javacCommand = "javac ";
         if (proj.hasLibs)
         {
-            compile_command
+            javacCommand
                 .append("-cp ")
                 .append(proj.classpath)
                 .append(" ");
         }
-        compile_command.append("-d ").append(proj.build_path).append(" ").append(proj.sources);
+        javacCommand.append("-d ").append(proj.buildPath).append(" ").append(proj.sources);
         printf("> Compile java files with javac:\n");
-        printf("  $ %s\n", compile_command.c_str());
-        exec(compile_command.c_str());
+        printf("  $ %s\n", javacCommand.c_str());
+        Util::ExecuteCommand(javacCommand.c_str());
     }
     else
     {
-        printf("> Didn't found any .java files in the specified source folder and subfolders.\n\tPath: %s\n", proj.src_path.c_str());
+        printf("> Didn't found any .java files in the specified source folder and subfolders.\n\tPath: %s\n", proj.srcPath.c_str());
         printf("Press any key to continue or Ctrl+C to exit.");
         getchar();
     }
 }
 
-void gen_extract_cmd(const JakeProj &proj)
+void Java::ExtractExternalLibraries(const JakeProj &proj)
 {
-    if (proj.fat_jar == "true" && proj.hasLibs)
+    if (proj.fatJar == "true" && proj.hasLibs)
     {
         printf("> Extracting jar classes:\n");
-        std::string extract_cmd;
+        std::string extractCommand;
         for (auto lib : proj.libs)
         {
-            extract_cmd.append("jar xf ").append(proj.pwd).append("/").append(lib);
-            printf("  $ %s\n", extract_cmd.c_str());
-            std::filesystem::current_path(proj.build_path);
-            exec(extract_cmd.c_str());
+            extractCommand.append("jar xf ").append(proj.pwd).append("/").append(lib);
+            printf("  $ %s\n", extractCommand.c_str());
+            std::filesystem::current_path(proj.buildPath);
+            Util::ExecuteCommand(extractCommand.c_str());
             std::filesystem::current_path(proj.pwd);
-            extract_cmd = "";
+            extractCommand = "";
         }
     }
 }
 
-void gen_jar_cmd(const JakeProj &proj)
+void Java::CreateJar(const JakeProj &proj)
 {
     if (!proj.includes.empty())
     {
@@ -54,32 +54,32 @@ void gen_jar_cmd(const JakeProj &proj)
         {
             if (std::filesystem::is_directory(include))
             {
-                std::string tmp = proj.build_path;
+                std::string tmp = proj.buildPath;
                 std::filesystem::create_directories(tmp.append("/").append(include));
                 std::filesystem::copy(include, tmp);
             }
             else
             {
-                std::filesystem::copy(include, proj.build_path);
+                std::filesystem::copy(include, proj.buildPath);
             }
         }
     }
-    std::filesystem::current_path(proj.build_path);
-    std::string jar_command = "jar ";
-    if (!proj.entry_point.empty())
+    std::filesystem::current_path(proj.buildPath);
+    std::string createJarCommand = "jar ";
+    if (!proj.entryPoint.empty())
     {
-        jar_command.append("cfe ");
-        jar_command.append(proj.jar_name).append(".jar ");
-        jar_command.append(proj.entry_point).append(" ");
+        createJarCommand.append("cfe ");
+        createJarCommand.append(proj.jarName).append(".jar ");
+        createJarCommand.append(proj.entryPoint).append(" ");
     }
     else
     {
-        jar_command.append("cf ");
-        jar_command.append(proj.jar_name).append(".jar ");
+        createJarCommand.append("cf ");
+        createJarCommand.append(proj.jarName).append(".jar ");
     }
-    jar_command.append("* ");
-    printf("> Creating jar file: %s\n", proj.jar_name.c_str());
-    printf("  $ %s\n", jar_command.c_str());
-    exec(jar_command.c_str());
+    createJarCommand.append("* ");
+    printf("> Creating jar file: %s\n", proj.jarName.c_str());
+    printf("  $ %s\n", createJarCommand.c_str());
+    Util::ExecuteCommand(createJarCommand.c_str());
     std::filesystem::current_path(proj.pwd);
 }

@@ -7,7 +7,7 @@
 #include "./include/util.h"
 
 // https://stackoverflow.com/a/478960
-std::string exec(const char *cmd)
+std::string Util::ExecuteCommand(const char *cmd)
 {
     char buffer[128];
     std::string result = "";
@@ -30,7 +30,7 @@ std::string exec(const char *cmd)
     return result;
 }
 
-char *shift(int *argc, char ***argv)
+char *Util::ShiftArg(int *argc, char ***argv)
 {
     assert(*argc > 0);
     char *result = **argv;
@@ -39,7 +39,7 @@ char *shift(int *argc, char ***argv)
     return result;
 }
 
-nlohmann::json load_json(const char *path)
+nlohmann::json Util::LoadJson(const char *path)
 {
     if (std::filesystem::exists(path))
     {
@@ -56,7 +56,7 @@ nlohmann::json load_json(const char *path)
     return nullptr;
 }
 
-std::string try_get(const nlohmann::json &json, const char *key)
+std::string Util::TryGet(const nlohmann::json &json, const char *key)
 {
     if (json.find(key) != json.end())
     {
@@ -70,12 +70,12 @@ std::string try_get(const nlohmann::json &json, const char *key)
     return nullptr;
 }
 
-std::string try_get_or(const nlohmann::json &json, const char *key, const char* fallback)
+std::string Util::TryGetOr(const nlohmann::json &json, const char *key, const char* fallback)
 {
     return json.find(key) != json.end() ? json[key].get<std::string>() : fallback;
 }
 
-std::vector<std::string> collect_files_with_ext_on_path(const char *path, const char *extension)
+std::vector<std::string> Util::CollectFilesWithExtOnPath(const char *path, const char *extension)
 {
     std::vector<std::string> paths;
     for (const auto &p : std::filesystem::recursive_directory_iterator(path))

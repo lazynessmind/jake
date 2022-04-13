@@ -2,10 +2,14 @@
 #define JAVA_FILE
 
 #include <string>
-#include "./main.h"
 
-void gen_javac_cmd(const JakeProj &);
-void gen_extract_cmd(const JakeProj &);
-void gen_jar_cmd(const JakeProj &);
+#include "./jake.h"
 
-#endif //JAVA_FILE
+namespace Java
+{
+    void CompileJavaSources(const JakeProj &);
+    void ExtractExternalLibraries(const JakeProj &);
+    void CreateJar(const JakeProj &);
+}
+
+#endif // JAVA_FILE
