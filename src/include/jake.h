@@ -8,23 +8,26 @@
 
 struct JakeProj
 {
-    std::string proj_name;
+    std::string projectName;
     std::string version;
-    std::string src_path;
-    std::string build_path;
-    std::string entry_point;
+    std::string srcPath;
+    std::string buildPath;
+    std::string entryPoint;
     std::string sources;
     std::string classpath;
-    std::string fat_jar;
+    std::string fatJar;
     std::string pwd;
     std::vector<std::string> libs;
     std::vector<std::string> includes;
     bool hasLibs;
-    std::string jar_name;
+    std::string jarName;
 };
 
-void print_usage();
-void build_project(int, char **);
-JakeProj try_create(const nlohmann::json &);
+namespace Jake
+{
+    void PrintUsage();
+    void BuildProject(int, char **);
+    JakeProj TryCreateProject(const nlohmann::json &);
+}
 
 #endif // MAIN_FILE
