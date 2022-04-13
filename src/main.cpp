@@ -2,8 +2,8 @@
 #include <filesystem>
 #include <cstring>
 
-#include "include/jake.h"
-#include "include/util.h"
+#include "jake.h"
+#include "util.h"
 
 int main(int argc, char **argv)
 {

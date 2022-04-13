@@ -1,7 +1,7 @@
 #include <string>
 
-#include "./include/java.h"
-#include "./include/util.h"
+#include "java.h"
+#include "util.h"
 
 void Java::CompileJavaSources(const JakeProj &proj)
 {

@@ -4,7 +4,7 @@
 #include <string>
 #include <cassert>
 
-#include "./include/util.h"
+#include "util.h"
 
 // https://stackoverflow.com/a/478960
 std::string Util::ExecuteCommand(const char *cmd)

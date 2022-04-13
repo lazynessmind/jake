@@ -1,6 +1,6 @@
-#include "include/jake.h"
-#include "include/java.h"
-#include "include/util.h"
+#include "jake.h"
+#include "java.h"
+#include "util.h"
 
 void Jake::PrintUsage()
 {

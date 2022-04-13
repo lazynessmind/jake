@@ -7,8 +7,6 @@ add_executable(jake
     ./src/main.cpp
     ./src/java.cpp
     ./src/jake.cpp
-    ./src/include/util.h
-    ./src/include/json.hpp
-    ./src/include/java.h
-    ./src/include/jake.h
 )
+
+target_include_directories(jake PUBLIC include/)
