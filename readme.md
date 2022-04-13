@@ -20,7 +20,7 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 - [x] Change jakefile to json
 - [ ] Maybe my own Java Archive Tool.
 - [ ] External repositories
-- [ ] Refactor code to use namespaces and classes??
+- [x] Refactor code to use namespaces and classes??
 
 ### jakefile:
 
