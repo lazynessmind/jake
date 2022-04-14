@@ -7,35 +7,9 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 
 **Note:** Only tested on Linux Ubuntu 21
 
-### Roadmap:
-- [x] Automatic gather of `.java` files and compilation.
-- [x] Build the `.jar` file and include the entry point.
-- [x] Make some options `optional`. I.e: `entry_point` isn't always needed.
-  - [x] Build and source path.
-  - [x] Entry point.  
-- [x] Add support for 3rd party libraries.
-- [ ] Support for external manifest file.
-- [ ] Support links to jar on "libs"
-- [x] Jakefile option: Include folder.
-- [x] Change jakefile to json
-- [ ] Maybe my own Java Archive Tool.
-- [ ] External repositories
-- [x] Refactor code to use namespaces and classes??
+### Jakefile:
 
-### jakefile:
-
-Create a file called `jakefile.json`.<br>
-Note: `[?]` means the field is optional. <br>
-Every fields only accepts strings.
-
-- **src_path[?]**: Where the source code is present. Defaults to `./src`.  
-- **build_path[?]**: Compilation output files. Defaults to `./build`.  
-- **entry_point[?]**: The path to the class that contains the `main` method.
-- **project_name**: The project name.
-- **version**: The project version.
-- **libs**: Array of paths of .jar files to include on classpath.
-- **include**: Array of paths to include in the jar.
-- **fat_jar[?]**: If set to false, jake doesn't include the libs when creating the jar. Defaults to `"true"`.
+Check the full explanation in [docs/jakefile.md](docs/jakefile.md).
 
 ```json
 {
