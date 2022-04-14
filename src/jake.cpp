@@ -42,6 +42,7 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
     proj.version = Util::TryGet(jakefile, "version");
     proj.srcPath = Util::TryGetOr(jakefile, "srcPath", "./src");
     proj.buildPath = Util::TryGetOr(jakefile, "buildPath", "./build");
+    proj.libsPath = Util::TryGetOr(jakefile, "libsPath", "./libs");
     proj.entryPoint = Util::TryGetOr(jakefile, "entryPoint", "");
     proj.fatJar = Util::TryGetOr(jakefile, "fat_jar", "true");
     proj.pwd = std::filesystem::current_path();
@@ -51,6 +52,7 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
     // Prepare directories
     std::filesystem::create_directories(proj.srcPath);
     std::filesystem::create_directories(proj.buildPath);
+    std::filesystem::create_directories(proj.libsPath);
 
     // Generate sources
     std::string sources;
@@ -60,12 +62,15 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
     proj.sources = sources;
 
     // Generate file path
-    if (jakefile.find("libs") != jakefile.end())
+    auto libs = Util::CollectFilesWithExtOnPath(proj.libsPath.c_str(), ".jar");
+    if (!libs.empty())
     {
         std::string classpath = ".:";
-        proj.libs = jakefile["libs"].get<std::vector<std::string>>();
-        for (auto lib : proj.libs)
+        for (auto lib : libs)
+        {
             classpath.append(lib).append(":");
+            proj.libs.push_back(lib);
+        }
         proj.classpath = classpath;
     }
 

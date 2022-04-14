@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "srcPath": "./src",
     "buildPath": "./build",
+    "libsPath": "./libs",
     "entryPoint": "lazy.test.Main",
     "include": [
         "./assets",

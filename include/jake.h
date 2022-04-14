@@ -12,6 +12,7 @@ struct JakeProj
     std::string version;
     std::string srcPath;
     std::string buildPath;
+    std::string libsPath;
     std::string entryPoint;
     std::string sources;
     std::string classpath;
