@@ -1,12 +1,9 @@
 {
-    "project_name": "Test",
+    "projectName": "Test",
     "version": "1.0.0",
-    "src_path": "./src",
-    "build_path": "./build",
-    "entry_point": "lazy.test.Main",
-    "libs": [
-        "./libs/math.jar"
-    ],
+    "srcPath": "./src",
+    "buildPath": "./build",
+    "entryPoint": "lazy.test.Main",
     "include": [
         "./assets",
         "./assets/other",

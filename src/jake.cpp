@@ -38,11 +38,11 @@ void Jake::BuildProject(int argc, char **argv)
 JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
 {
     JakeProj proj;
-    proj.projectName = Util::TryGet(jakefile, "project_name");
+    proj.projectName = Util::TryGet(jakefile, "projectName");
     proj.version = Util::TryGet(jakefile, "version");
     proj.srcPath = Util::TryGetOr(jakefile, "srcPath", "./src");
     proj.buildPath = Util::TryGetOr(jakefile, "buildPath", "./build");
-    proj.entryPoint = Util::TryGetOr(jakefile, "entry_point", "");
+    proj.entryPoint = Util::TryGetOr(jakefile, "entryPoint", "");
     proj.fatJar = Util::TryGetOr(jakefile, "fat_jar", "true");
     proj.pwd = std::filesystem::current_path();
     proj.jarName = proj.projectName;
