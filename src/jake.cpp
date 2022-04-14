@@ -62,7 +62,6 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
     // Generate file path
     if (jakefile.find("libs") != jakefile.end())
     {
-        proj.hasLibs = true;
         std::string classpath = ".:";
         proj.libs = jakefile["libs"].get<std::vector<std::string>>();
         for (auto lib : proj.libs)

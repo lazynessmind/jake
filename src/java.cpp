@@ -8,7 +8,7 @@ void Java::CompileJavaSources(const JakeProj &proj)
     if (!proj.sources.empty())
     {
         std::string javacCommand = "javac ";
-        if (proj.hasLibs)
+        if (!proj.libs.empty())
         {
             javacCommand
                 .append("-cp ")
@@ -30,7 +30,7 @@ void Java::CompileJavaSources(const JakeProj &proj)
 
 void Java::ExtractExternalLibraries(const JakeProj &proj)
 {
-    if (proj.fatJar == "true" && proj.hasLibs)
+    if (proj.fatJar == "true" && !proj.libs.empty())
     {
         printf("> Extracting jar classes:\n");
         std::string extractCommand;
