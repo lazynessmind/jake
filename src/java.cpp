@@ -48,19 +48,57 @@ void Java::ExtractExternalLibraries(const JakeProj &proj)
 
 void Java::CreateJar(const JakeProj &proj)
 {
+    printf("> Collecting files to include:\n");
     if (!proj.includes.empty())
     {
+        std::string tmp = proj.buildPath;
         for (auto include : proj.includes)
         {
-            if (std::filesystem::is_directory(include))
+            if (include.ends_with("*"))
             {
-                std::string tmp = proj.buildPath;
-                std::filesystem::create_directories(tmp.append("/").append(include));
-                std::filesystem::copy(include, tmp);
+                auto path = include.substr(0, include.length() - 1);
+                printf("  > Including all files in %s\n", path.c_str());
+                if (std::filesystem::is_directory(path))
+                {
+                    auto inInclude = Util::CollectFilesWithExtOnPath(path.c_str());
+                    for (auto pathInPath : inInclude)
+                    {
+                        if (!std::filesystem::exists(tmp.append("/").append(pathInPath)))
+                        {
+                            tmp = proj.buildPath;
+                            auto fileName = Util::SplitString(pathInPath, "/").back();
+                            auto filePath = pathInPath.substr(0, pathInPath.length() - fileName.length());
+                            tmp.append("/").append(filePath);
+
+                            if (!std::filesystem::exists(tmp))
+                            {
+                                std::filesystem::create_directories(tmp);
+                            }
+
+                            if (std::find(proj.excludes.begin(), proj.excludes.end(), pathInPath) != proj.excludes.end())
+                            {
+                                printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", pathInPath.c_str());
+                            }
+                            else
+                            {
+                                std::filesystem::copy(pathInPath, tmp);
+                            }
+                        }
+                    }
+                }
             }
             else
             {
-                std::filesystem::copy(include, proj.buildPath);
+                if (std::filesystem::is_directory(include))
+                {
+                    std::string tmp = proj.buildPath;
+                    std::filesystem::create_directories(tmp.append("/").append(include));
+                    std::filesystem::copy(include, tmp);
+                }
+                else
+                {
+                    std::filesystem::copy(include, proj.buildPath);
+                }
             }
         }
     }

@@ -6,8 +6,11 @@
     "libsPath": "./libs",
     "entryPoint": "lazy.test.Main",
     "include": [
-        "./assets",
-        "./assets/other",
+        "./assets/*",
         "LICENSE.txt"
+    ],
+    "exclude": [
+        "./assets/dont.md",
+        "./assets/other/dont2.js"
     ]
 }

@@ -78,5 +78,9 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
     if (jakefile.find("include") != jakefile.end())
         proj.includes = jakefile["include"].get<std::vector<std::string>>();
 
+    // Gather exclude paths
+    if (jakefile.find("exclude") != jakefile.end())
+        proj.excludes = jakefile["exclude"].get<std::vector<std::string>>();
+
     return proj;
 }
