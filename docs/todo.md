@@ -14,6 +14,8 @@
 - [ ] Support links to jar on "libs"
 - [ ] Maybe my own Java Archive Tool.
 - [ ] External repositories
+- [ ] Include support for OS dependent jars
+    - Maybe `${libsPath}/linux`, `${libsPath}/windows` 
 
 # Done:
 
