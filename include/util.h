@@ -14,7 +14,7 @@ namespace Util
     nlohmann::json LoadJson(const char *);
     std::string TryGet(const nlohmann::json &, const char *);
     std::string TryGetOr(const nlohmann::json &, const char *, const char *);
-    std::vector<std::string> CollectFilesWithExtOnPath(const char *, const char *);
+    std::vector<std::string> CollectFilesWithExtOnPath(const char *, const char * = "*");
 }
 
 #endif // UTIL_FILE

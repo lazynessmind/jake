@@ -80,7 +80,7 @@ std::vector<std::string> Util::CollectFilesWithExtOnPath(const char *path, const
     std::vector<std::string> paths;
     for (const auto &p : std::filesystem::recursive_directory_iterator(path))
         if (!std::filesystem::is_directory(p))
-            if (p.path().filename().extension() == extension)
+            if (p.path().filename().extension() == extension || strcmp(extension, "*") == 0)
                 paths.emplace_back(p.path());
     return paths;
 }
