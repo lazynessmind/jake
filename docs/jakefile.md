@@ -10,20 +10,37 @@
 | libsPath   | `true`   | `${pwd}/libs` | All the local `.jar` files that are included in the final jar.                          | `true`      |
 | entryPoint  | `true`   | `none`         | The package to the Java file where the `main` method is implemented. | `true`      |
 | include      | `true`   | `none`         | List of folder or files that are copied to the final jar.            | `true`      |
-| exclude      | `true`   | `none`         | List of folder or files that are excluded from the final jar.        | `false`     |
+| exclude      | `true`   | `none`         | List of folder or files that are excluded from the final jar.        | `partial`     |
 | maven        | `true`   | `none`         | List of maven repositories to access throw `libs`                    | `false`     |
 
 ## How it works:
 
 ### `include`
 
-You can include a folder or a single file. If you specify a folder, all the contents inside are copied to the final jar.
+Currently you can include files in three forms:
+- Using `*` to include everything in the folder.
+- Specify the path to a single file.
+- Specify the path to a folder. In this case all the files inside are included if not present in the `exclude` list.
 
 ```json
 {
     "include": [
         "./assets/",
-        "./secret.txt"
+        "./secret.txt",
+        "./assets/*"
+    ]
+}
+```
+
+### `exclude`
+
+Currently only supports single file paths.
+
+```json
+{
+    "exclude": [
+        "./assets/dont.md"
+        "./assets/other/dont2.js"
     ]
 }
 ```

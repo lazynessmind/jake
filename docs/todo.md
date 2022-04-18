@@ -1,6 +1,15 @@
 # Todo:
 
-- [ ] Exclude files and folders.
+- [ ] Include:
+  - [x] All in folder.
+  - [x] All in single folder.
+  - [x] Single file.
+  - [ ] File extension filter.
+- [ ] Exclude:
+  - [x] Single file; 
+  - [ ] All in folder.
+  - [ ] All in single folder.
+  - [ ] File extension filter.
 - [ ] Support for external manifest file.
 - [ ] Support links to jar on "libs"
 - [ ] Maybe my own Java Archive Tool.
