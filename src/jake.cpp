@@ -1,6 +1,7 @@
 #include "jake.h"
 #include "java.h"
 #include "util.h"
+#include "fileutils.h"
 
 void Jake::PrintUsage()
 {
@@ -56,20 +57,31 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
 
     // Generate sources
     std::string sources;
-    auto paths = Util::CollectFilesWithExtOnPath(proj.srcPath.c_str(), ".java");
+    auto paths = FileUtils::GatherAllContentsInFolder(proj.srcPath.c_str(), ".java");
     for (auto path : paths)
         sources.append(path).append(" ");
     proj.sources = sources;
 
+    // Gather exclude paths
+    if (jakefile.find("exclude") != jakefile.end())
+        proj.excludes = jakefile["exclude"].get<std::vector<std::string>>();
+
     // Generate file path
-    auto libs = Util::CollectFilesWithExtOnPath(proj.libsPath.c_str(), ".jar");
+    auto libs = FileUtils::GatherAllContentsInFolder(proj.libsPath.c_str(), ".jar");
     if (!libs.empty())
     {
         std::string classpath = ".:";
         for (auto lib : libs)
         {
-            classpath.append(lib).append(":");
-            proj.libs.push_back(lib);
+            if (std::find(proj.excludes.begin(), proj.excludes.end(), lib) != proj.excludes.end())
+            {
+                printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", lib.c_str());
+            }
+            else
+            {
+                classpath.append(lib).append(":");
+                proj.libs.push_back(lib);
+            }
         }
         proj.classpath = classpath;
     }
@@ -78,9 +90,11 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
     if (jakefile.find("include") != jakefile.end())
         proj.includes = jakefile["include"].get<std::vector<std::string>>();
 
-    // Gather exclude paths
-    if (jakefile.find("exclude") != jakefile.end())
-        proj.excludes = jakefile["exclude"].get<std::vector<std::string>>();
+    for (auto include : proj.includes)
+    {
+        auto filter = FileUtils::GetFilter(include);
+        printf("Filter for %s is %s\n", include.c_str(), FileUtils::FilterToString(filter));
+    }
 
     return proj;
 }
