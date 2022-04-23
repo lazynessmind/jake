@@ -11,24 +11,6 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 
 Check the full explanation in [docs/jakefile.md](docs/jakefile.md).
 
-```json
-{
-    "project_name": "Test",
-    "version": "1.0.0",
-    "src_path": "./example/src",
-    "build_path": "./example/build",
-    "entry_point": "lazy.test.Main",
-    "fat_jar": "true",
-    "libs": [
-        "./example/libs/math.jar"
-    ],
-    "include": [
-      "./example/include.txt",
-      "./examples/assets/"
-    ]
-}
-```
-
 #### Command line:
 
 - **-b**: Build all the sources and creates the `.jar` file.
