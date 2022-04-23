@@ -7,10 +7,15 @@
     "entryPoint": "lazy.test.Main",
     "include": [
         "./assets/*",
-        "LICENSE.txt"
+        "LICENSE.txt",
+        "./meta/*.txt",
+        "./other/**/*.md",
+        "./include/**/*",
+        "./assets/res/"
     ],
     "exclude": [
         "./assets/dont.md",
-        "./assets/other/dont2.js"
+        "./assets/other/dont2.js",
+        "./libs/log4j.jar"
     ]
 }
