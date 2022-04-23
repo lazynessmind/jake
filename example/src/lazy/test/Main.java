@@ -14,11 +14,20 @@ public class Main {
         System.out.println(MathLib.sum(34, 35));
         System.out.println("> Test if files are present within the jar:");
         assertExistence("/assets/java.png");
-        assertExistence("/assets/other/secrets.txt");
+        assertExistence("/meta/a.txt");
         assertExistence("/LICENSE.txt");
+        assertExistence("/other/how.md");
+        assertExistence("/other/info/other.md");
+        assertExistence("/include/also/add.this");
+        assertExistence("/include/add.this");
+        assertExistence("/assets/res/layout.xml");
         System.out.println("> Test if files aren't present within the jar:");
         assertNonExistence("/assets/dont.md");
+        assertNonExistence("/assets/other/secrets.txt");
         assertNonExistence("/assets/other/dont2.js");
+        assertNonExistence("/meta/a.txt.copy");
+        assertNonExistence("/meta/copy/b.txt.copy");
+        assertNonExistence("/meta/copy/b.txt");
         System.out.println("Done!");
     }
 
