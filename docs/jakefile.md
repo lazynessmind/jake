@@ -21,13 +21,16 @@ Currently you can include files in three forms:
 - Using `*` to include everything in the folder.
 - Specify the path to a single file.
 - Specify the path to a folder. In this case all the files inside are included if not present in the `exclude` list.
+- Using `/**/*.{extension}` will include all the file with the given extension within the path and subfolders present in the path. You can use `*.{extension}` to include all files with the extension in a single folder.
 
 ```json
 {
     "include": [
         "./assets/",
         "./secret.txt",
-        "./assets/*"
+        "./assets/*",
+        "./meta/*.txt",
+        "./meta/**/*.copy"
     ]
 }
 ```

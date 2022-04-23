@@ -1,10 +1,10 @@
 # Todo:
 
-- [ ] Include:
+- [x] Include:
   - [x] All in folder.
   - [x] All in single folder.
   - [x] Single file.
-  - [ ] File extension filter.
+  - [x] File extension filter.
 - [ ] Exclude:
   - [x] Single file; 
   - [ ] All in folder.
