@@ -2,6 +2,7 @@
 
 #include "java.h"
 #include "util.h"
+#include "fileutils.h"
 
 void Java::CompileJavaSources(const JakeProj &proj)
 {
@@ -54,50 +55,116 @@ void Java::CreateJar(const JakeProj &proj)
         std::string tmp = proj.buildPath;
         for (auto include : proj.includes)
         {
-            if (include.ends_with("*"))
+            if (FileUtils::GetFilter(include) == FileUtils::ALL_IN_FOLDER || FileUtils::GetFilter(include) == FileUtils::SINGLE_FOLDER)
             {
-                auto path = include.substr(0, include.length() - 1);
-                printf("  > Including all files in %s\n", path.c_str());
-                if (std::filesystem::is_directory(path))
+                auto actualPath = include.substr(0, include.length() - 1);
+                auto allInPath = FileUtils::GatherAllFilesInFolder(actualPath.c_str());
+                for (auto file : allInPath)
                 {
-                    auto inInclude = Util::CollectFilesWithExtOnPath(path.c_str());
-                    for (auto pathInPath : inInclude)
+                    auto fileInfo = FileUtils::GatherFileInfoFromPath(file);
+                    if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
                     {
-                        if (!std::filesystem::exists(tmp.append("/").append(pathInPath)))
-                        {
-                            tmp = proj.buildPath;
-                            auto fileName = Util::SplitString(pathInPath, "/").back();
-                            auto filePath = pathInPath.substr(0, pathInPath.length() - fileName.length());
-                            tmp.append("/").append(filePath);
-
-                            if (!std::filesystem::exists(tmp))
-                            {
-                                std::filesystem::create_directories(tmp);
-                            }
-
-                            if (std::find(proj.excludes.begin(), proj.excludes.end(), pathInPath) != proj.excludes.end())
-                            {
-                                printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", pathInPath.c_str());
-                            }
-                            else
-                            {
-                                std::filesystem::copy(pathInPath, tmp);
-                            }
-                        }
+                        printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", file.c_str());
+                    }
+                    else
+                    {
+                        FileUtils::CreateDirectoriesAndCopyTo(fileInfo, proj.buildPath);
                     }
                 }
             }
-            else
+            else if (!std::filesystem::is_directory(include))
             {
-                if (std::filesystem::is_directory(include))
+
+                if (FileUtils::GetFilter(include) == FileUtils::ALL_WITH_EXTENSION)
                 {
-                    std::string tmp = proj.buildPath;
-                    std::filesystem::create_directories(tmp.append("/").append(include));
-                    std::filesystem::copy(include, tmp);
+                    auto fileInfo = FileUtils::GatherFileInfoFromPath(include);
+                    auto withExt = FileUtils::GatherAllFilesInFolder(fileInfo.filepath.c_str(), fileInfo.extension.c_str());
+
+                    for (auto file : withExt)
+                    {
+
+                        auto fileinfo = FileUtils::GatherFileInfoFromPath(file);
+                        printf("File: %s\n", file.c_str());
+
+                        if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
+                        {
+                            printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", file.c_str());
+                        }
+                        else
+                        {
+                            FileUtils::CreateDirectoriesAndCopyTo(fileinfo, proj.buildPath);
+                        }
+                    }
+                }
+                else if (FileUtils::GetFilter(include) == FileUtils::ALL_WITH_EXTENSION_WITH_SUBFOLDER)
+                {
+                    auto fileInfo = FileUtils::GatherFileInfoFromPath(include);
+
+                    std::string filter = "/**/*";
+                    filter.append(fileInfo.extension);
+
+                    std::string path = fileInfo.fullpath.substr(0, fileInfo.fullpath.length() - filter.length());
+
+                    printf("Fileals: %s\n", path.c_str());
+
+                    auto withExt = FileUtils::GatherAllContentsInFolder(path.c_str(), fileInfo.extension.c_str());
+
+                    for (auto file : withExt)
+                    {
+
+                        auto fileinfo = FileUtils::GatherFileInfoFromPath(file);
+                        printf("File: %s\n", file.c_str());
+
+                        if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
+                        {
+                            printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", file.c_str());
+                        }
+                        else
+                        {
+                            FileUtils::CreateDirectoriesAndCopyTo(fileinfo, proj.buildPath);
+                        }
+                    }
                 }
                 else
                 {
-                    std::filesystem::copy(include, proj.buildPath);
+                    if (FileUtils::GetFilter(include) == FileUtils::ALL_IN_FOLDER_WITH_SUBFOLDER)
+                    {
+                        auto fileInfo = FileUtils::GatherFileInfoFromPath(include);
+
+                        std::string filter = "/**/*";
+
+                        std::string path = fileInfo.fullpath.substr(0, fileInfo.fullpath.length() - filter.length());
+
+                        printf("Fileals: %s\n", path.c_str());
+
+                        auto withExt = FileUtils::GatherAllContentsInFolder(path.c_str());
+
+                        for (auto file : withExt)
+                        {
+
+                            auto fileinfo = FileUtils::GatherFileInfoFromPath(file);
+                            printf("File: %s\n", file.c_str());
+
+                            if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
+                            {
+                                printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", file.c_str());
+                            }
+                            else
+                            {
+                                FileUtils::CreateDirectoriesAndCopyTo(fileinfo, proj.buildPath);
+                            }
+                        }
+                    }
+                    else if (std::filesystem::is_directory(include))
+                    {
+                        std::string tmp = proj.buildPath;
+                        std::filesystem::create_directories(tmp.append("/").append(include));
+                        std::filesystem::copy(include, tmp);
+                    }
+                    else
+                    {
+                        std::filesystem::copy(include, proj.buildPath);
+                    }
                 }
             }
         }
