@@ -75,16 +75,6 @@ std::string Util::TryGetOr(const nlohmann::json &json, const char *key, const ch
     return json.find(key) != json.end() ? json[key].get<std::string>() : fallback;
 }
 
-std::vector<std::string> Util::CollectFilesWithExtOnPath(const char *path, const char *extension)
-{
-    std::vector<std::string> paths;
-    for (const auto &p : std::filesystem::recursive_directory_iterator(path))
-        if (!std::filesystem::is_directory(p))
-            if (p.path().filename().extension() == extension || strcmp(extension, "*") == 0)
-                paths.emplace_back(p.path());
-    return paths;
-}
-
 //https://stackoverflow.com/a/46931770
 std::vector<std::string> Util::SplitString(const std::string& s, const std::string& delimiter)
 {
