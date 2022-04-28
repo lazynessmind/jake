@@ -16,9 +16,7 @@ void Jake::PrintUsage()
 
 void Jake::BuildProject(int argc, char **argv, bool run)
 {
-    std::string jakefile = "";
-    const char *arg = Util::ShiftArg(&argc, &argv);
-    JakeProj proj = TryCreateProject(Util::LoadJson(jakefile.append(arg).append("/jakefile.json").c_str()));
+    JakeProj proj = TryCreateProject(Util::LoadJson("./jakefile.json"));
 
     // I don't belive this is the best option, but it's the easiest.
     std::filesystem::remove_all(proj.buildPath);
@@ -100,7 +98,8 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
         {
             if (std::find(proj.excludes.begin(), proj.excludes.end(), lib) != proj.excludes.end())
             {
-                printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", lib.c_str());
+                //TODO: Find better way to display this.
+                //printf("> WARN! Ignoring file: %s Motive: Found on the exclude list.\n", lib.c_str());
             }
             else
             {
@@ -114,12 +113,6 @@ JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)
     // Gather include paths
     if (jakefile.find("include") != jakefile.end())
         proj.includes = jakefile["include"].get<std::vector<std::string>>();
-
-    for (auto include : proj.includes)
-    {
-        auto filter = FileUtils::GetFilter(include);
-        printf("Filter for %s is %s\n", include.c_str(), FileUtils::FilterToString(filter));
-    }
 
     return proj;
 }
