@@ -7,22 +7,11 @@ The idea came from the simple make build system for C and C++. Both Gradle and M
 
 **Note:** Only tested on Linux Ubuntu 21
 
-### Jakefile:
+### Documentation:
 
-Check the full explanation in [docs/jakefile.md](docs/jakefile.md).
-
-#### Command line:
-
-- **-b**: Build all the sources and creates the `.jar` file.
-- **-v**: Prints the current `jake` version.
-
-Basic usage: `./jake [options][path to jakefile]`
-
-```bash
-$ ./jake -b .
-```
-
-In the above command the `jakefile.properties` is in the root file.
+Jakefile: [docs/jakefile.md](docs/jakefile.md).<br>
+TODO: [docs/todo.md](docs/todo.md).<br>
+Usage: [docs/usage.md](docs/usage.md).<br>
 
 ### Build jake:
 
@@ -30,9 +19,10 @@ In the above command the `jakefile.properties` is in the root file.
   - **cmake**
 
 ```bash
-$ git clone https://github.com/lazynessmind/jake.git
-$ cd jake
-$ cmake --build .
+git clone https://github.com/lazynessmind/jake.git
+cd jake
+cmake .
+make
 ```
 ### Third Party Software
 
