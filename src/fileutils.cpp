@@ -51,16 +51,29 @@ Filter FileUtils::GetFilter(const std::string &path)
 
 FileInfo FileUtils::GatherFileInfoFromPath(const std::string &path)
 {
-    auto finalPathPart = Util::SplitString(path, "/").back();
-    std::string extension = ".";
-    extension.append(Util::SplitString(finalPathPart, ".").back());
-    auto fileName = finalPathPart.substr(0, finalPathPart.length() - (extension.length() + 1));
-    auto filePath = path.substr(0, path.length() - finalPathPart.length());
-
-    if (filePath.empty())
-        filePath = "./";
-
-    return {fileName, finalPathPart, extension, filePath, path};
+    if (std::filesystem::is_directory(path))
+    {
+        return {"", "", "", path, path};
+    }
+    else
+    {
+        FileInfo info;
+        info.fullfilename = Util::SplitString(path, "/").back();
+        if (path.ends_with("*"))
+        {
+            info.extension = "";
+        }
+        else
+        {
+            //FIXME: Do I really need the .?
+            std::string extension = ".";
+            info.extension = extension.append(Util::SplitString(info.fullfilename, ".").back());
+        }
+        info.filename = info.fullfilename.substr(0, info.fullfilename.length() - (info.extension.length()));
+        info.filepath = path.substr(0, path.length() - info.fullfilename.length());
+        info.fullpath = path;
+        return info;
+    }
 }
 
 const char *FileUtils::FilterToString(FileUtils::PathFilter filter)
@@ -96,7 +109,7 @@ void FileUtils::CreateDirectoriesAndCopyTo(const FileInfo &fileinfo, const std::
     std::filesystem::copy(fileinfo.fullpath, tmp);
 }
 
-std::vector<std::string> FileUtils::GatherAllFilesInFolder(const std::string &path, const char* ext)
+std::vector<std::string> FileUtils::GatherAllFilesInFolder(const std::string &path, const char *ext)
 {
     std::vector<std::string> files;
     if (!std::filesystem::is_directory(path))
