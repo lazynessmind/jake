@@ -4,7 +4,8 @@ example/build/*
 cmake_install.cmake
 CMakeCache.txt
 jake
-jake_tests
+jaketest
 Makefile
 /example/*.jar
 build
+CTestTestfile.cmake
