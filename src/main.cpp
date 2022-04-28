@@ -24,6 +24,14 @@ int main(int argc, char **argv)
         else if (strcmp(arg, "-b") == 0)
         {
             Jake::BuildProject(argc, argv);
+        }
+        else if (strcmp(arg, "-br") == 0)
+        {
+            Jake::BuildProject(argc, argv, true);
+        }
+        else if (strcmp(arg, "-r") == 0)
+        {
+            Jake::RunProject();
             return 1;
         }
         else
@@ -32,5 +40,6 @@ int main(int argc, char **argv)
             return 1;
         }
     }
+
     return 0;
 }

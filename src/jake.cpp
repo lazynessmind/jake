@@ -9,10 +9,12 @@ void Jake::PrintUsage()
     printf("\tjake [options] [path to jakefile]\n");
     printf("\tOptions:\n");
     printf("\t\t-b: Only build.\n");
+    printf("\t\t-r: Run jar program.\n");
+    printf("\t\t-br: Build and run the jar program.\n");
     printf("\t\t-v: Print version.\n");
 }
 
-void Jake::BuildProject(int argc, char **argv)
+void Jake::BuildProject(int argc, char **argv, bool run)
 {
     std::string jakefile = "";
     const char *arg = Util::ShiftArg(&argc, &argv);
@@ -34,6 +36,29 @@ void Jake::BuildProject(int argc, char **argv)
         std::filesystem::rename(jarPath, std::filesystem::current_path().string().append("/").append(proj.jarName).append(".jar"));
     }
     printf("> Done!\n");
+
+    if (run)
+    {
+        std::string runCmd = "java -jar ";
+        runCmd.append(proj.jarName).append(".jar");
+        printf("Running:\n%s", Util::ExecuteCommand(runCmd.c_str()).c_str());
+    }
+}
+
+void Jake::RunProject()
+{
+    JakeProj proj = TryCreateProject(Util::LoadJson("./jakefile.json"));
+    std::string jarName = proj.jarName;
+    if (std::filesystem::exists(jarName.append(".jar")))
+    {
+        std::string runCmd = "java -jar ";
+        runCmd.append(proj.jarName).append(".jar");
+        printf("%s", Util::ExecuteCommand(runCmd.c_str()).c_str());
+    }
+    else
+    {
+        printf("Error: Couldn't found %s in this path: %s\n", jarName.c_str(), proj.pwd.c_str());
+    }
 }
 
 JakeProj Jake::TryCreateProject(const nlohmann::json &jakefile)

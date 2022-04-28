@@ -27,7 +27,8 @@ struct JakeProj
 namespace Jake
 {
     void PrintUsage();
-    void BuildProject(int, char **);
+    void BuildProject(int, char **, bool run = false);
+    void RunProject();
     JakeProj TryCreateProject(const nlohmann::json &);
 }
 

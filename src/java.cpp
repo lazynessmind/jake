@@ -18,7 +18,7 @@ void Java::CompileJavaSources(const JakeProj &proj)
         }
         javacCommand.append("-d ").append(proj.buildPath).append(" ").append(proj.sources);
         printf("> Compile java files with javac:\n");
-        printf("  $ %s\n", javacCommand.c_str());
+        printf("  $ %s\n", javacCommand.length() > 70 ? javacCommand.substr(0, 70).append("...").c_str() : javacCommand.c_str());
         Util::ExecuteCommand(javacCommand.c_str());
     }
     else
@@ -84,7 +84,6 @@ void Java::CreateJar(const JakeProj &proj)
                     {
 
                         auto fileinfo = FileUtils::GatherFileInfoFromPath(file);
-                        printf("File: %s\n", file.c_str());
 
                         if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
                         {
@@ -105,15 +104,12 @@ void Java::CreateJar(const JakeProj &proj)
 
                     std::string path = fileInfo.fullpath.substr(0, fileInfo.fullpath.length() - filter.length());
 
-                    printf("Fileals: %s\n", path.c_str());
-
                     auto withExt = FileUtils::GatherAllContentsInFolder(path.c_str(), fileInfo.extension.c_str());
 
                     for (auto file : withExt)
                     {
 
                         auto fileinfo = FileUtils::GatherFileInfoFromPath(file);
-                        printf("File: %s\n", file.c_str());
 
                         if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
                         {
@@ -135,15 +131,12 @@ void Java::CreateJar(const JakeProj &proj)
 
                         std::string path = fileInfo.fullpath.substr(0, fileInfo.fullpath.length() - filter.length());
 
-                        printf("Fileals: %s\n", path.c_str());
-
                         auto withExt = FileUtils::GatherAllContentsInFolder(path.c_str());
 
                         for (auto file : withExt)
                         {
 
                             auto fileinfo = FileUtils::GatherFileInfoFromPath(file);
-                            printf("File: %s\n", file.c_str());
 
                             if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
                             {
