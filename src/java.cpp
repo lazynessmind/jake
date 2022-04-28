@@ -17,13 +17,13 @@ void Java::CompileJavaSources(const JakeProj &proj)
                 .append(" ");
         }
         javacCommand.append("-d ").append(proj.buildPath).append(" ").append(proj.sources);
-        printf("> Compile java files with javac:\n");
+        printf("%s> Compile java files with javac:%s\n", Util::GetAnsiColorStr(Util::GREEN), Util::GetAnsiColorStr(Util::RESET));
         printf("  $ %s\n", javacCommand.length() > 70 ? javacCommand.substr(0, 70).append("...").c_str() : javacCommand.c_str());
         Util::ExecuteCommand(javacCommand.c_str());
     }
     else
     {
-        printf("> Didn't found any .java files in the specified source folder and subfolders.\n\tPath: %s\n", proj.srcPath.c_str());
+        printf("%s> Didn't found any .java files in the specified source folder and subfolders.%s\n\tPath: %s\n", Util::GetAnsiColorStr(Util::RED), Util::GetAnsiColorStr(Util::RESET), proj.srcPath.c_str());
         printf("Press any key to continue or Ctrl+C to exit.");
         getchar();
     }
@@ -33,7 +33,7 @@ void Java::ExtractExternalLibraries(const JakeProj &proj)
 {
     if (proj.fatJar == "true" && !proj.libs.empty())
     {
-        printf("> Extracting jar classes:\n");
+        printf("%s> Extracting jar classes:%s\n", Util::GetAnsiColorStr(Util::GREEN), Util::GetAnsiColorStr(Util::RESET));
         std::string extractCommand;
         for (auto lib : proj.libs)
         {
@@ -49,7 +49,7 @@ void Java::ExtractExternalLibraries(const JakeProj &proj)
 
 void Java::CreateJar(const JakeProj &proj)
 {
-    printf("> Collecting files to include:\n");
+    printf("%s> Collecting files to include:%s\n", Util::GetAnsiColorStr(Util::GREEN), Util::GetAnsiColorStr(Util::RESET));
     if (!proj.includes.empty())
     {
         std::string tmp = proj.buildPath;
@@ -176,7 +176,7 @@ void Java::CreateJar(const JakeProj &proj)
         createJarCommand.append(proj.jarName).append(".jar ");
     }
     createJarCommand.append("* ");
-    printf("> Creating jar file: %s\n", proj.jarName.c_str());
+    printf("%s> Creating jar file: %s%s\n", Util::GetAnsiColorStr(Util::GREEN), Util::GetAnsiColorStr(Util::RESET), proj.jarName.c_str());
     printf("  $ %s\n", createJarCommand.c_str());
     Util::ExecuteCommand(createJarCommand.c_str());
     std::filesystem::current_path(proj.pwd);

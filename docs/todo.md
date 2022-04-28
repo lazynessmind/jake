@@ -1,10 +1,7 @@
 # Todo:
 
-- [x] Include:
-  - [x] All in folder.
-  - [x] All in single folder.
-  - [x] Single file.
-  - [x] File extension filter.
+- [ ] Windows support.
+- [ ] Not verbose.
 - [ ] Exclude:
   - [x] Single file; 
   - [ ] All in folder.
@@ -19,6 +16,7 @@
 
 # Done:
 
+- [x] Add colors to output.
 - [x] Automatic gather of `.java` files and compilation.
 - [x] Build the `.jar` file and include the entry point.
 - [x] Make some options `optional`. I.e: `entry_point` isn't always needed.
@@ -28,3 +26,9 @@
 - [x] Jakefile option: Include folder.
 - [x] Change jakefile to json
 - [x] Refactor code to use namespaces and classes??
+- [x] Include:
+  - [x] All in folder.
+  - [x] All in single folder.
+  - [x] Single file.
+  - [x] File extension filter.
+- [x] Run and Build or each at a time. 

@@ -25,21 +25,19 @@ void Jake::BuildProject(int argc, char **argv, bool run)
     Java::ExtractExternalLibraries(proj);
     Java::CreateJar(proj);
 
-    printf("> Move .jar to root folder:\n");
     std::string jarPath = proj.buildPath;
     jarPath.append("/").append(proj.jarName).append(".jar");
     if (std::filesystem::exists(jarPath))
     {
-        printf("  $ mv %s %s\n", jarPath.c_str(), std::filesystem::current_path().string().append("/").append(proj.jarName).append(".jar").c_str());
         std::filesystem::rename(jarPath, std::filesystem::current_path().string().append("/").append(proj.jarName).append(".jar"));
     }
-    printf("> Done!\n");
+    printf("%s> Done!%s\n", Util::GetAnsiColorStr(Util::GREEN), Util::GetAnsiColorStr(Util::RESET));
 
     if (run)
     {
         std::string runCmd = "java -jar ";
         runCmd.append(proj.jarName).append(".jar");
-        printf("Running:\n%s", Util::ExecuteCommand(runCmd.c_str()).c_str());
+        printf("=========================================\n%s", Util::ExecuteCommand(runCmd.c_str()).c_str());
     }
 }
 

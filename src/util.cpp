@@ -70,13 +70,13 @@ std::string Util::TryGet(const nlohmann::json &json, const char *key)
     return nullptr;
 }
 
-std::string Util::TryGetOr(const nlohmann::json &json, const char *key, const char* fallback)
+std::string Util::TryGetOr(const nlohmann::json &json, const char *key, const char *fallback)
 {
     return json.find(key) != json.end() ? json[key].get<std::string>() : fallback;
 }
 
-//https://stackoverflow.com/a/46931770
-std::vector<std::string> Util::SplitString(const std::string& s, const std::string& delimiter)
+// https://stackoverflow.com/a/46931770
+std::vector<std::string> Util::SplitString(const std::string &s, const std::string &delimiter)
 {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     std::string token;
@@ -91,4 +91,20 @@ std::vector<std::string> Util::SplitString(const std::string& s, const std::stri
 
     res.push_back(s.substr(pos_start));
     return res;
+}
+
+const char *Util::GetAnsiColorStr(const ANSIColors &color)
+{
+    switch (color)
+    {
+    case ANSIColors::RED:
+        return "\u001b[31m";
+    case ANSIColors::GREEN:
+        return "\u001b[32m";
+    case ANSIColors::RESET:
+        return "\u001b[0m";
+    default:
+        printf("Unreachable state!!");
+        exit(-1);
+    }
 }
