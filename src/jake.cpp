@@ -6,7 +6,7 @@
 void Jake::PrintUsage()
 {
     printf("Usage:\n");
-    printf("\tjake [options] [path to jakefile]\n");
+    printf("\tjake [options]\n");
     printf("\tOptions:\n");
     printf("\t\t-b: Only build.\n");
     printf("\t\t-r: Run jar program.\n");
