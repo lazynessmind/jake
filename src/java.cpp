@@ -64,7 +64,7 @@ void Java::CreateJar(const JakeProj &proj)
                     auto fileInfo = FileUtils::GatherFileInfoFromPath(file);
                     if (std::find(proj.excludes.begin(), proj.excludes.end(), file) != proj.excludes.end())
                     {
-                        printf("    > Ignoring file: %s Motive: Found on the exclude list.\n", file.c_str());
+                        printf("  > Ignoring file: %s Motive: Found on the exclude list.\n", file.c_str());
                     }
                     else
                     {
