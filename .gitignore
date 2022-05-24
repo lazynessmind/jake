@@ -7,5 +7,6 @@ jake
 jaketest
 Makefile
 /example/*.jar
+/example/.cache/*
 build
 CTestTestfile.cmake

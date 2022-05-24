@@ -44,6 +44,20 @@ void Java::ExtractExternalLibraries(const JakeProj &proj)
             std::filesystem::current_path(proj.pwd);
             extractCommand = "";
         }
+
+        if (!proj.repositories.empty())
+        {
+            auto repoLibs = FileUtils::GatherAllContentsInFolder("./.cache/", ".jar");
+            for (auto repoLib : repoLibs)
+            {
+                extractCommand.append("jar xf ").append(proj.pwd).append("/").append(repoLib);
+                printf("  $ %s\n", extractCommand.c_str());
+                std::filesystem::current_path(proj.buildPath);
+                Util::ExecuteCommand(extractCommand.c_str());
+                std::filesystem::current_path(proj.pwd);
+                extractCommand = "";
+            }
+        }
     }
 }
 

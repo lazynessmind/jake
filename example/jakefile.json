@@ -17,5 +17,25 @@
         "./assets/dont.md",
         "./assets/other/dont2.js",
         "./libs/log4j.jar"
+    ],
+    "repositories": [
+        "https://repo.maven.apache.org/maven2/"
+    ],
+    "externalLibs": [
+        {
+            "groupId": "org.junit.jupiter",
+            "artifact": "junit-jupiter-api",
+            "version": "5.8.2"
+        },
+        {
+            "groupId": "org.junit.jupiter",
+            "artifact": "junit-jupiter-engine",
+            "version": "5.8.2"
+        },
+        {
+            "groupId": "org.junit.jupiter",
+            "artifact": "junit-jupiter-params",
+            "version": "5.8.2"
+        }
     ]
 }
